@@ -1,13 +1,12 @@
 [
   {
     "id": 1,
-    "name": "Example user",
-    "balance": 1000,
-    "bids": [
-      {
-        "itemId": 2,
-        "amount": 300
-      }
-    ]
+    "name": "Pin",
+    "balance": 1000
+  },
+  {
+    "id": 2,
+    "name": "Mulett",
+    "balance": 1000
   }
 ]

@@ -1,0 +1,105 @@
+body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 100px;
+    height: 100vh;
+    background-color: #262627;
+    color: whitesmoke;
+    font-family: "Space Grotesk", sans-serif;
+    letter-spacing: 1px;
+    
+}
+
+/* Title */
+h1 {
+    font-size: 4rem;
+    color: rgb(171, 81, 255);
+    text-shadow: 0 0 8px rgba(171, 81, 255, 0.7),
+                 0 0 20px rgba(171, 81, 255, 0.4);
+    margin-bottom: 2rem;
+}
+
+h2 {
+    font-size: 2rem;
+    color: rgb(241, 81, 255);
+    margin-bottom: 1rem;
+}
+
+#time {
+    font-size: 1.5rem;
+    color: rgb(255, 251, 254);
+    text-shadow: 0 0 8px rgba(171, 81, 255, 0.7),
+                 0 0 20px rgba(171, 81, 255, 0.4);
+    margin-bottom: 1rem;
+}
+h3 {
+    font-size: 1.6rem;
+    color: rgb(255, 251, 254);
+    margin-bottom: 1rem;
+}
+#items-list {
+    gap: 20px;
+    width: 80%;
+    max-width: 1000px;
+    margin-top: 20px;
+
+}
+
+.card {
+  background: rgba(38, 38, 39, 0.9);
+  border: 2px solid rgb(171, 81, 255);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem;
+  color: whitesmoke;
+  font-family: "Space Grotesk", sans-serif;
+  width: 400px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  /* transition for hover */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Magical glow behind */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -20px; /* spread glow */
+  background: radial-gradient(circle, rgba(171,81,255,0.4), transparent 70%);
+  filter: blur(30px);
+  z-index: -1; /* sits behind the card */
+  opacity: 0.8;
+  animation: auraPulse 6s infinite alternate;
+}
+
+/* Hover scale */
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(171, 81, 255, 0.6);
+}
+
+/* Aura breathing effect */
+@keyframes auraPulse {
+  from { opacity: 0.4; }
+  to { opacity: 0.9; }
+}
+
+/* Closed state */
+.card.closed {
+  border-color: gray;
+  color: #aaa;
+  opacity: 0.7;
+}
+
+.card.closed::after {
+  display: none; /* no aura glow */
+}
+
+.card.closed h3::after {
+  content: " ✖";
+  color: red;
+  font-weight: bold;
+}

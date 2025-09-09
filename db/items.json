@@ -4,7 +4,7 @@
         "name": "Espada mágica",
         "basePrice": 100,
         "highestBid": 100,
-        "highestBidder": null,
+        "highestBidder": "null",
         "sold": false
     },
     {

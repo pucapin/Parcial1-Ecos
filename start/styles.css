@@ -1,0 +1,62 @@
+body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: #262627;
+    color: whitesmoke;
+    font-family: "Space Grotesk", sans-serif;
+    letter-spacing: 1px;
+}
+
+/* Title */
+h1 {
+    font-size: 4rem;
+    color: rgb(171, 81, 255);
+    text-shadow: 0 0 8px rgba(171, 81, 255, 0.7),
+                 0 0 20px rgba(171, 81, 255, 0.4);
+    margin-bottom: 2rem;
+}
+/* Input */
+#input-user {
+    background: none;
+    font-family: "Space Grotesk", sans-serif;
+
+    border: 1.5px solid rgb(171, 81, 255);
+    border-radius: 4px;
+    padding: 10px 14px;
+    color: whitesmoke;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 240px;
+    text-align: center;
+}
+
+#input-user:focus {
+    border-color: #00e5ff;
+}
+
+/* Button */
+#register {
+font-family: "Space Grotesk", sans-serif;
+
+    background: none;
+    border: 1.5px solid rgb(171, 81, 255);
+    border-radius: 4px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    color: whitesmoke;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#register:hover {
+    background-color: rgb(171, 81, 255);
+    border-color: rgb(171, 81, 255);
+    color: #262627;
+}
