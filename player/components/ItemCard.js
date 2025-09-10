@@ -5,8 +5,7 @@ class ItemCard extends HTMLElement {
   }
 
   connectedCallback() {
-    this.item = JSON.parse(this.getAttribute("item"));
-    console.log(this.item);
+    this.item = JSON.parse(this.getAttribute("item"));      
     this.render();
   }
 
@@ -21,13 +20,17 @@ class ItemCard extends HTMLElement {
         <div class="card">
         <h3>${this.item.name}</h3>
         <p>Current Bid: <strong>$${this.item.highestBid}</strong></p>
-        <p id="highest-bidder">Highest Bidder: ${this.item.highestBidder}</p>
+        <p id="highest-bidder">Highest Bidder: ${this.item.highestBidderName}</p>
         </div>
         `;
         if(this.item.highestBidder === null) {
           const highestBidder = this.shadowRoot.getElementById("highest-bidder");
           highestBidder.textContent = "Highest Bidder: None yet";
         }
+        const card = this.shadowRoot.querySelector(".card");
+        card.addEventListener("click", () => {
+          window.location.href = `/player/item.html?id=${this.item.id}`;
+        });
   }
 }
 

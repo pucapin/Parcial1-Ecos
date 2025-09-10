@@ -18,8 +18,11 @@ class Register extends HTMLElement {
 
         <input type="text" placeholder="Enter username" required id="input-user"/>
         <button id="register">Start</button>
+                <p id="error-message"></p>
+
         `;
     const registerBtn = this.shadowRoot.getElementById('register');
+    const errorEl = this.shadowRoot.getElementById('error-message');
     registerBtn.addEventListener("click", (e) => {
       e.preventDefault();
       const username = this.shadowRoot.getElementById("input-user").value;
@@ -27,22 +30,28 @@ class Register extends HTMLElement {
       fetch("/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ "name": username })
+        body: JSON.stringify({ name: username })
       })
-        .then(res => {
-          if (!res.ok) throw new Error("Registration failed");
-          return res.json();
-        })
-        .then(data => {
-          console.log("Registration success:", data);
-          window.location.href = "/player";
-          localStorage.setItem("user", JSON.stringify(data.id));
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      .then(async res => {
+        if (!res.ok) {
+          const errorMessage = await res.text();
+          errorEl.textContent = errorMessage || "Registration failed";
+          throw new Error(errorMessage || "Registration failed");
+        }
+        return res.json();
+      })
+      .then(data => {
+        localStorage.setItem("user", data.id);
+        window.location.href = "/player";
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        btn.disabled = false;
+      });
     });
+    };
   }
-}
 
 customElements.define("register-page", Register);

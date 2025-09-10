@@ -10,7 +10,6 @@ body {
     letter-spacing: 1px;
 }
 
-/* Title */
 h1 {
     font-size: 4rem;
     color: rgb(171, 81, 255);
@@ -18,7 +17,6 @@ h1 {
                  0 0 20px rgba(171, 81, 255, 0.4);
     margin-bottom: 2rem;
 }
-/* Input */
 #input-user {
     background: none;
     font-family: "Space Grotesk", sans-serif;
@@ -38,7 +36,6 @@ h1 {
     border-color: #00e5ff;
 }
 
-/* Button */
 #register {
 font-family: "Space Grotesk", sans-serif;
 

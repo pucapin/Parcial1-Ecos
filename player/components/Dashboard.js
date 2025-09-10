@@ -31,7 +31,7 @@ class Dashboard extends HTMLElement {
   render() {
     this.shadowRoot.innerHTML = `
       <link rel="stylesheet" href="./styles.css">
-
+      <button id="logout">Logout</button>
       <h1 id="time">${this.auction?.endTime ? "" : "Auction closed"}</h1>
       <h1>Hello, ${this.user?.name || "Guest"}</h1> 
       <img src="wizard.png" alt="" height="200px">
@@ -104,6 +104,14 @@ startRefreshingItems() {
 
   loadData();
   this.intervalId = setInterval(loadData, 1000); // refresh both every second
+
+  const logoutBtn = this.shadowRoot.getElementById("logout");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("user");
+      window.location.href = "/start";
+    });
+  }
 }
 
 }

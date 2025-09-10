@@ -6,7 +6,8 @@
   },
   {
     "id": 2,
-    "name": "Mulett",
-    "balance": 1000
+    "name": "AEIO",
+    "balance": 400,
+    "reserved": 600
   }
 ]
