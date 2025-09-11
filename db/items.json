@@ -3,10 +3,10 @@
     "id": 1,
     "name": "Espada mágica",
     "basePrice": 100,
-    "highestBid": 110,
-    "highestBidder": 3,
-    "highestBidderName": "Tibu",
-    "sold": true
+    "highestBid": 100,
+    "highestBidder": null,
+    "highestBidderName": null,
+    "sold": false
   },
   {
     "id": 2,
@@ -21,10 +21,10 @@
     "id": 3,
     "name": "Poción de invisibilidad",
     "basePrice": 80,
-    "highestBid": 100,
-    "highestBidder": 3,
-    "highestBidderName": "Tibu",
-    "sold": true
+    "highestBid": 80,
+    "highestBidder": null,
+    "highestBidderName": null,
+    "sold": false
   },
   {
     "id": 4,
@@ -39,10 +39,10 @@
     "id": 5,
     "name": "Báculo de sabiduría ancestral",
     "basePrice": 120,
-    "highestBid": 130,
-    "highestBidder": 3,
-    "highestBidderName": "Tibu",
-    "sold": true
+    "highestBid": 120,
+    "highestBidder": null,
+    "highestBidderName": null,
+    "sold": false
   },
   {
     "id": 6,
@@ -57,9 +57,9 @@
     "id": 7,
     "name": "Grimorio de hechizos prohibidos",
     "basePrice": 250,
-    "highestBid": 260,
+    "highestBid": 300,
     "highestBidder": 2,
-    "highestBidderName": "AEIO",
+    "highestBidderName": "Pinn",
     "sold": true
   },
   {
@@ -75,18 +75,18 @@
     "id": 9,
     "name": "Botas de velocidad divina",
     "basePrice": 110,
-    "highestBid": 120,
-    "highestBidder": 3,
-    "highestBidderName": "Tibu",
-    "sold": true
+    "highestBid": 110,
+    "highestBidder": null,
+    "highestBidderName": null,
+    "sold": false
   },
   {
     "id": 10,
     "name": "Corona del rey druida",
     "basePrice": 300,
-    "highestBid": 340,
-    "highestBidder": 2,
-    "highestBidderName": "AEIO",
+    "highestBid": 500,
+    "highestBidder": 1,
+    "highestBidderName": "Mulett",
     "sold": true
   }
 ]

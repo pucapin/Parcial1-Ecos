@@ -50,7 +50,7 @@ class ItemDetail extends HTMLElement {
       <div class="item">
         <h2>${item.name}</h2>
         <p><strong>Highest Bid:</strong> $${item.highestBid ?? 0}</p>
-        <p><strong>Highest Bidder:</strong> ${item.highestBidder ?? "None"}</p>
+        <p><strong>Highest Bidder:</strong> ${item.highestBidderName ?? "None"}</p>
         <input type="number" id="bid-amount" placeholder="Enter your bid"/>
         <button id="bid">Place Bid</button>
         <p id="error-message"></p>

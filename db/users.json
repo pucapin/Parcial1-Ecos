@@ -1,19 +1,14 @@
 [
   {
     "id": 1,
-    "name": "Pin",
-    "balance": 1000
+    "name": "Mulett",
+    "balance": 500,
+    "reserved": 0
   },
   {
     "id": 2,
-    "name": "AEIO",
-    "balance": 400,
-    "reserved": -17400
-  },
-  {
-    "id": 3,
-    "name": "Tibu",
-    "balance": 540,
-    "reserved": -10340
+    "name": "Pinn",
+    "balance": 700,
+    "reserved": 0
   }
 ]

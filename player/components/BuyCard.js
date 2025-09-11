@@ -16,7 +16,7 @@ class BuyCard extends HTMLElement {
       this.shadowRoot.innerHTML = `
         <link rel="stylesheet" href="./styles.css">
         <div class="card">
-        <h3>The winner of ${this.item.name} is ${this.item.highestBidderName} for </h3>
+        <h3>Congratulations ${this.item.highestBidderName} ! You won ${this.item.name} for </h3>
         <p><strong>$${this.item.highestBid}</strong></p>
         <p>Base price: ${this.item.basePrice}</p>
         </div>

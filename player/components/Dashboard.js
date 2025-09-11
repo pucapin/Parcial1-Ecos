@@ -8,7 +8,6 @@ class Dashboard extends HTMLElement {
 
   connectedCallback() {
     this.userId = localStorage.getItem("user");
-
     Promise.all([
       fetch(`/auction`).then(res => res.json()),
       fetch(`/users/${this.userId}`).then(res => res.json())
@@ -38,6 +37,7 @@ class Dashboard extends HTMLElement {
 
     <h1>Hello, ${this.user?.name || "Guest"}</h1> 
     <img src="wizard.png" alt="" height="200px">
+    <p id="balance">Your balance is</p>
     <h1>Your new items</h1>
     <div id="won-bids">
     </div>
@@ -48,10 +48,19 @@ class Dashboard extends HTMLElement {
     
     </div>
     `
+    
+    const balanceEl = this.shadowRoot.getElementById('balance');
     const wonBids = this.shadowRoot.getElementById("won-bids");
     const soldList = this.shadowRoot.getElementById("sold-list");
-
-
+    fetch(`/users/${this.userId}`)
+    .then(res => res.json())
+    .then(user => {
+      this.user = user;
+      console.log(this.user.balance)
+      console.log(this.user.reserved)
+      const userBalance = this.user.balance + this.user.reserved;
+      balanceEl.textContent = `Your balance is: $${userBalance}`;
+    });
     fetch("/items/?sort=highestBid")
     .then(res => {
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -78,7 +87,7 @@ fetch(`/items/${this.userId}/items`)
 
 
     if (items.length === 0) {
-      wonBids.innerHTML = `<h1>You didn't win any bids :(</h1>`;
+      wonBids.innerHTML = `<p>You didn't win any bids :(</p>`;
       return;
     }
 
@@ -100,10 +109,11 @@ fetch(`/items/${this.userId}/items`)
       <h1 id="time">${this.auction?.endTime ? "" : "Auction closed"}</h1>
       <h1>Hello, ${this.user?.name || "Guest"}</h1> 
       <img src="wizard.png" alt="" height="200px">
-      <p>Your balance is: <strong>$${this.user?.balance ?? 0}</strong></p>
+      <p id="balance">Your balance is: <strong></strong></p>
       <h2>Items for Auction</h2>
       <div id="items-list"></div>
     `;
+    
   }
 
   startCountdown() {
@@ -149,6 +159,14 @@ startRefreshingItems() {
         }
       })
       .catch(err => console.error("Error loading auction:", err));
+    
+    fetch(`/users/${this.userId}`)
+    .then(res => res.json())
+    .then(user => {
+      const balanceEl = this.shadowRoot.getElementById('balance')
+      this.user = user;
+      balanceEl.textContent = `Your balance is: $${this.user.balance}`;
+    });
 
     fetch("/items?sort=highestBid")
       .then(res => {

@@ -6,7 +6,6 @@ class ItemCard extends HTMLElement {
 
   connectedCallback() {
     this.item = JSON.parse(this.getAttribute("item"));
-    console.log(this.item);
     this.render();
   }
 

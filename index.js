@@ -151,13 +151,15 @@ app.post("/items/:id/bid", (req, res) => {
     // eliminar monto reservado de bidder anterior (reserva - highestbid)
     const lastBid = item.highestBid;
     const lastBidderId = item.highestBidder;
+
     if (lastBid > item.basePrice && lastBidderId !== null) {
-      const idx = users.findIndex((u) => u.userId === lastBidderId);
-      if (idx !== -1) {
-        users[idx].balance += item.highestBid;
-        users[idx].reserved -= item.highestBid;
+      const lastBidder = users.find(u => u.id === lastBidderId);
+      if (lastBidder) {
+        lastBidder.balance += lastBid;
+        lastBidder.reserved -= lastBid;
       }
     }
+
 
     //actualizar monto reservado y balance
     user.balance -= amount;
@@ -213,8 +215,10 @@ app.post("/auction/closeAll", (req, res) => {
       const winner = users.find((u) => u.id === item.highestBidder);
       if (winner) {
         // Consolidar reservas -> a cada ganador, eliminar reservas y dejar valor final
-
         winner.reserved -= item.highestBid;
+        winner.balance += winner.reserved;
+
+        
         fs.writeFileSync(itemsFilePath, JSON.stringify(items, null, 2));
         fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
         fs.writeFileSync(auctionFilePath, JSON.stringify(auction, null, 2));
@@ -228,6 +232,33 @@ app.post("/auction/closeAll", (req, res) => {
 
   fs.writeFileSync(auctionFilePath, JSON.stringify({ auction }, null, 2));
   res.json(auction);
+});
+
+app.post("/auction/reset", (req, res) => {
+  try {
+    const items = readItems();
+    let users = readUsers();
+
+    // reset items
+    items.forEach((item) => {
+      item.sold = false;
+      item.highestBid = item.basePrice;
+      item.highestBidder = null;
+      item.highestBidderName = null;
+    });
+
+    fs.writeFileSync(itemsFilePath, JSON.stringify(items, null, 2));
+    users = []; // reset users -- eliminarlos
+    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+
+    const auction = { isOpen: false, endTime: null };
+    fs.writeFileSync(auctionFilePath, JSON.stringify({ auction }, null, 2));
+
+    res.json({ message: "Auction successfully reset" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to reset auction." });
+  }
 });
 
 app.listen(5080, () => {
