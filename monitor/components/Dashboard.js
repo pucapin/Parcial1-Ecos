@@ -11,8 +11,6 @@ class Dashboard extends HTMLElement {
       this.auction = data;
       this.render();
       this.startCountdown();
-
-
     }
     );
   }
@@ -37,7 +35,8 @@ class Dashboard extends HTMLElement {
         .then(res => res.json())
         .then(data => {
           this.auction = data;
-          this.render();
+          this.shadowRoot.innerHTML = ''
+          this.renderResults();
         });
         return;
       }
@@ -92,6 +91,39 @@ class Dashboard extends HTMLElement {
           });
       });
     }
+  }
+  renderResults() {
+    if(!this.shadowRoot) {
+      return;
+    }
+    this.shadowRoot.innerHTML = `
+    <link rel="stylesheet" href="./styles.css">
+
+    <h1>Hello, Admin</h1> <img src="wizard.png" alt="" height="200px">
+    <button id="reset-auction">Reset Auction</button>
+    <h1>Auction Results</h1>
+    <div id="sold-list">
+    
+    </div>
+    `
+    fetch("/items/?sort=highestBid")
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch items");
+      return res.json();  
+    }).then(items => {
+      const soldList = this.shadowRoot.getElementById("sold-list");
+      items.forEach(item => {
+        const soldCard = document.createElement("sold-card");
+        soldCard.setAttribute("item", JSON.stringify(item));
+        soldList.appendChild(soldCard);
+      });
+    });
+    const resetAuction = this.shadowRoot.getElementById('reset-auction');
+    resetAuction.addEventListener('click', () => {
+      this.shadowRoot.innerHTML = '';
+      this.render();
+    })
+
   }
 
 }

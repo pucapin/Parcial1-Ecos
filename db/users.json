@@ -8,6 +8,12 @@
     "id": 2,
     "name": "AEIO",
     "balance": 400,
-    "reserved": 600
+    "reserved": -17400
+  },
+  {
+    "id": 3,
+    "name": "Tibu",
+    "balance": 540,
+    "reserved": -10340
   }
 ]

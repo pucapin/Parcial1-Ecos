@@ -21,10 +21,10 @@ class ItemCard extends HTMLElement {
         <div class="card">
         <h3>${this.item.name}</h3>
         <p>Current Bid: <strong>$${this.item.highestBid}</strong></p>
-        <p id="highest-bidder">Highest Bidder: ${this.item.highestBidder}</p>
+        <p id="highest-bidder">Highest Bidder: ${this.item.highestBidderName}</p>
         </div>
         `;
-        if(this.item.highestBidder === null) {
+        if(this.item.highestBidderName === null) {
           const highestBidder = this.shadowRoot.getElementById("highest-bidder");
           highestBidder.textContent = "Highest Bidder: None yet";
         }

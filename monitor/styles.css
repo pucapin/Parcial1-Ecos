@@ -118,6 +118,20 @@ h3 {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+#reset-auction {
+  background: transparent;
+  color: rgb(171, 81, 255);
+  border: 2px solid rgb(171, 81, 255);
+  font-size: 1.2rem;
+  font-family: "Space Grotesk", sans-serif;
+  padding: 0.8rem 2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
 #start-auction::before {
   content: "";
   position: absolute;

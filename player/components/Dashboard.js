@@ -7,14 +7,15 @@ class Dashboard extends HTMLElement {
   }
 
   connectedCallback() {
-    const userId = localStorage.getItem("user");
+    this.userId = localStorage.getItem("user");
 
     Promise.all([
       fetch(`/auction`).then(res => res.json()),
-      fetch(`/users/${userId}`).then(res => res.json())
+      fetch(`/users/${this.userId}`).then(res => res.json())
     ])
     .then(([auction, user]) => {
       this.auction = auction;
+      console.log(this.auction)
       this.user = user;
       this.render();
       this.startCountdown();
@@ -26,6 +27,70 @@ class Dashboard extends HTMLElement {
   disconnectedCallback() {
     if (this.intervalId) clearInterval(this.intervalId);
     if (this.timer) clearInterval(this.timer);
+  }
+  renderResults() {
+    if(!this.shadowRoot) {
+      return;
+    }
+    this.shadowRoot.innerHTML = `
+    <link rel="stylesheet" href="./styles.css">
+    <button id="logout">Logout</button>
+
+    <h1>Hello, ${this.user?.name || "Guest"}</h1> 
+    <img src="wizard.png" alt="" height="200px">
+    <h1>Your new items</h1>
+    <div id="won-bids">
+    </div>
+
+    <h1>Auction Results</h1>
+
+    <div id="sold-list">
+    
+    </div>
+    `
+    const wonBids = this.shadowRoot.getElementById("won-bids");
+    const soldList = this.shadowRoot.getElementById("sold-list");
+
+
+    fetch("/items/?sort=highestBid")
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch items");
+      return res.json();  
+    }).then(items => {
+      items.forEach(item => {
+        const soldCard = document.createElement("sold-card");
+        soldCard.setAttribute("item", JSON.stringify(item));
+        soldList.appendChild(soldCard);
+      });
+    });
+
+
+fetch(`/items/${this.userId}/items`)
+  .then((res) => {
+    if (!res.ok) throw new Error("Failed to fetch user items");
+    return res.json();
+  })
+  .then((items) => {
+    console.log("Fetched items for user:", items);
+    if (!Array.isArray(items)) {
+      throw new Error("Expected an array, got: " + JSON.stringify(items));
+    }
+
+
+    if (items.length === 0) {
+      wonBids.innerHTML = `<h1>You didn't win any bids :(</h1>`;
+      return;
+    }
+
+    items.forEach((item) => {
+      const buyCard = document.createElement("buy-card");
+      buyCard.setAttribute("item", JSON.stringify(item));
+      wonBids.appendChild(buyCard);
+    });
+  })
+  .catch((err) => console.error("Error loading user items:", err));
+
+  
   }
 
   render() {
@@ -57,7 +122,7 @@ class Dashboard extends HTMLElement {
       if (timeLeft <= 0) {
         countdownEl.textContent = "Auction closed";
         clearInterval(this.timer);
-        return;
+        this.renderResults();
       }
 
       const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
@@ -68,6 +133,7 @@ class Dashboard extends HTMLElement {
     update();
     this.timer = setInterval(update, 1000);
   }
+
 
 startRefreshingItems() {
   const loadData = () => {

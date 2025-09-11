@@ -15,6 +15,7 @@ const auctionFilePath = path.join(__dirname, "db", "auction.json");
 const usersFilePath = path.join(__dirname, "db", "users.json");
 const itemsFilePath = path.join(__dirname, "db", "items.json");
 
+
 // funciones para leer archivos con fs :3
 
 function readAuction() {
@@ -59,19 +60,23 @@ app.get("/users/:id", (req, res) => {
 // Subasta Actual
 app.get("/auction", (req, res) => {
   try {
-    const data = JSON.parse(fs.readFileSync(auctionFilePath));
+    const raw = fs.readFileSync(auctionFilePath, "utf-8");
+    const auction = JSON.parse(raw);
 
-    if (data.auction.isOpen && new Date(data.auction.endTime) <= new Date()) {
-      data.auction.isOpen = false;
-      data.auction.endTime = null;
-      fs.writeFileSync(auctionFilePath, JSON.stringify(data, null, 2));
+    let response = { ...auction };
+
+    if (auction.isOpen && new Date(auction.endTime) <= new Date()) {
+      response = { ...auction, isOpen: false, endTime: null };
     }
 
-    res.json(data.auction);
+    res.json(response);
   } catch (err) {
+    console.error("Error in /auction:", err);
     res.json({ isOpen: false, endTime: null });
   }
 });
+
+
 
 // Obtener items
 app.get("/items", (req, res) => {
@@ -104,13 +109,14 @@ app.post("/items/:id/bid", (req, res) => {
   const itemId = parseInt(req.params.id, 10);
   const { userId, amount } = req.body;
   const auction = readAuction();
+
   const items = readItems();
   const item = items.find((i) => i.id === itemId);
   const users = readUsers();
   const user = users.find((u) => u.id === userId);
 
   // la subasta está cerrada
-  if (auction.isOpen !== true) {
+  if (!auction.isOpen) {
     return res.status(403).send("Auction is closed");
   }
   // No hay userId o ItemId
@@ -170,13 +176,25 @@ app.post("/items/:id/bid", (req, res) => {
   res.json(item);
 });
 
+app.get("/items/:userId/items", (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  const items = readItems();
+
+  const userItems = items.filter(i => i.highestBidder === userId);
+  
+  if (userItems.length === 0) {
+    return res.json([]); // empty array if no wins
+  }
+  res.json(userItems);
+});
+
 // Abrir auction (monitor)
 app.post("/auction/openAll", (req, res) => {
   const auction = {
     isOpen: true,
     endTime: new Date(Date.now() + 60000), // 1 min
   };
-  fs.writeFileSync(auctionFilePath, JSON.stringify({ auction }, null, 2));
+  fs.writeFileSync(auctionFilePath, JSON.stringify(auction, null, 2));
   res.json(auction);
 });
 // Cerrar auction (monitor)
@@ -188,18 +206,21 @@ app.post("/auction/closeAll", (req, res) => {
   const items = readItems();
   const users = readUsers();
   items.forEach((item) => {
+      // Marca cada item como sold = true , asignar ganador
+
     if (item.highestBidder && item.highestBid > item.basePrice) {
       item.sold = true;
       const winner = users.find((u) => u.id === item.highestBidder);
       if (winner) {
+        // Consolidar reservas -> a cada ganador, eliminar reservas y dejar valor final
+
         winner.reserved -= item.highestBid;
-        winner.balance = +winner.reserved;
+        fs.writeFileSync(itemsFilePath, JSON.stringify(items, null, 2));
+        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+        fs.writeFileSync(auctionFilePath, JSON.stringify(auction, null, 2));
       }
     }
   });
-  // Marca cada item como sold = true , asignar ganador
-
-  // Consolidar reservas -> a cada ganador, eliminar reservas y dejar valor final
 
   // Front Monitor: mostrar un resumen de los ganadores y precio final
 
